@@ -62,21 +62,19 @@
         },
         
         init: function() {
-            var a = this;
+            var that = this;
             
             
             this.btnSave.on("click", function() {
-                
-               // console.log($(this));
                 
                 localStorage.setItem("twojeImie", $("#podajImie").val());
                 localStorage.setItem("twojWiek", $("#podajWiek").val());
                 localStorage.setItem("twojeOczy", $("#podajKolor").val());
                 
                 $("#anser").remove();
-                a.questionBox.hide();
-                a.createTemplate(); 
-                a.clear();
+                that.questionBox.hide();
+                that.createTemplate(); 
+                that.clear();
             });
         },
         createTemplate: function() {
