@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Web sorage</title>
+</head>
+<body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+    
+    <div id="box">
+        <form>
+        <label for="podajImie"> Imie:</label><br>
+        <input id="podajImie" name="podajImie" type="text"><br>
+
+        <label for="podajWiek"> Wiek:</label><br>
+        <input id="podajWiek" name="podajWiek" type="number"><br>
+
+        <label for="podajKolor"> Kolor Oczu:</label><br>
+        <input id="podajKolor" name="podajKolor" type="text"><br>
+        </form><br>
+        <button id="save">save</button>
+    </div>
+    
+ 
+<script id="blogTemplete" type="tuts/template">
+<div id="anser">
+ <h1>Czesc {{imie}}</h1>
+<p>Masz {{lat}} lat i {{kolor}} oczy</p>
+<button id="clear">Clear Sorage</button>
+<div>
+
+
+</script>
+    
+    <p id="browserSupport" style="display: none">Your browser does not support local storege, click <a href="#">here</a> to upgrade.</p>
+
+    
+<script>
+    
+    var obj = {
+        questionBox: $("#box"),
+        btnSave: $("#save"),
+        template: $.trim( $("#blogTemplete").html() ),
+        
+        isStorageAvaible : function() {
+            if(typeof(Storage) !== undefined) {
+        
+                if (localStorage.getItem("twojeImie") !== null) {
+                    this.questionBox.hide();
+                    this.createTemplate();
+                    this.clear();
+                } else {
+                    this.init();
+                }
+                
+            } else {
+                $("#browserSupport").css("disply","block");
+            }
+        },
+        
+        init: function() {
+            var a = this;
+            
+            
+            this.btnSave.on("click", function() {
+                
+               // console.log($(this));
+                
+                localStorage.setItem("twojeImie", $("#podajImie").val());
+                localStorage.setItem("twojWiek", $("#podajWiek").val());
+                localStorage.setItem("twojeOczy", $("#podajKolor").val());
+                
+                $("#anser").remove();
+                a.questionBox.hide();
+                a.createTemplate(); 
+                a.clear();
+            });
+        },
+        createTemplate: function() {
+            
+            var temp = this.template.replace( /{{imie}}/ig, localStorage.getItem("twojeImie")  )
+                                .replace( /{{lat}}/ig, localStorage.getItem("twojWiek") )
+                                .replace( /{{kolor}}/ig, localStorage.getItem("twojeOczy") );
+            
+            $(document.body).append(temp);
+            
+        },
+        clear: function() {
+            $("#clear").on("click", function() {
+                localStorage.clear();
+                $("#anser").remove();
+                $("input").val("");
+                obj.questionBox.show();
+                obj.init();
+            })
+        }
+    }
+        
+    
+    
+    obj.isStorageAvaible();
+    
+</script>    
+    
+    
+    
+</body>
+</html>
